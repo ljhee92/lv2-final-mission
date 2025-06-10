@@ -47,6 +47,10 @@ public class Member {
         return new Member(null, Role.ADMIN, name, email, password);
     }
 
+    public boolean isCorrectPassword(String password) {
+        return password.equals(this.password);
+    }
+
     private static void validate(String name, String email, String password) {
         validateName(name);
         validateEmail(email);

@@ -104,4 +104,44 @@ public class MemberTest {
         assertThatThrownBy(() -> Member.createAdmin(name, email, password))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void 비밀번호가_일치하면_true를_반환한다() {
+        String nameOfMember = "사용자";
+        String emailOfMember = "member1@email.com";
+        String passwordOfMember = "password";
+
+        String nameOfAdmin = "관리자";
+        String emailOfAdmin = "admin@email.com";
+        String passwordOfAdmin = "passwordAdmin";
+
+        Member member = Member.createUser(nameOfMember, emailOfMember, passwordOfMember);
+        Member admin = Member.createAdmin(nameOfAdmin, emailOfAdmin, passwordOfAdmin);
+
+        assertAll(
+                () -> assertThat(member.isCorrectPassword(passwordOfMember)).isTrue(),
+                () -> assertThat(admin.isCorrectPassword(passwordOfAdmin)).isTrue()
+        );
+    }
+
+    @Test
+    void 비밀번호가_일치하지_않으면_true를_반환한다() {
+        String nameOfMember = "사용자";
+        String emailOfMember = "member1@email.com";
+        String passwordOfMember = "password";
+
+        String nameOfAdmin = "관리자";
+        String emailOfAdmin = "admin@email.com";
+        String passwordOfAdmin = "passwordAdmin";
+
+        String inCorrectPassword = "inCorrectPassword";
+
+        Member member = Member.createUser(nameOfMember, emailOfMember, passwordOfMember);
+        Member admin = Member.createAdmin(nameOfAdmin, emailOfAdmin, passwordOfAdmin);
+
+        assertAll(
+                () -> assertThat(member.isCorrectPassword(inCorrectPassword)).isFalse(),
+                () -> assertThat(admin.isCorrectPassword(inCorrectPassword)).isFalse()
+        );
+    }
 }

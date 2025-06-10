@@ -106,8 +106,6 @@ public class IntegrationTest {
     }
 
     @Test
-    @Disabled
-    // argument mismatch error
     void 로그인_여부를_확인한다() {
         Member member = memberFixture.createMember1();
         LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());

@@ -1,6 +1,7 @@
 package finalmission.application;
 
 import finalmission.domain.Member;
+import finalmission.exception.AuthException;
 import finalmission.infra.jwt.JwtTokenProvider;
 import finalmission.presentation.request.LoginMember;
 import finalmission.presentation.request.LoginRequest;
@@ -33,8 +34,16 @@ public class AuthService {
         }
     }
 
-    public Member findMemberByToken(String token) {
+    public LoginMember findMemberByToken(String token) {
+        checkToken(token);
         Long memberId = jwtTokenProvider.getId(token);
-        return memberService.findMemberById(memberId);
+        Member member = memberService.findMemberById(memberId);
+        return new LoginMember(member.getId(), member.getRole(), member.getName(), member.getEmail());
+    }
+
+    private void checkToken(String token) {
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new AuthException("[ERROR] 유효하지 않은 토큰입니다.");
+        }
     }
 }

@@ -95,7 +95,7 @@
     ```
 - 응답
     ```json
-    HTTP/1.1 200
+    HTTP/1.1 201
     Content-Type: application/json
     
     {
@@ -157,7 +157,7 @@
     ```
 - 응답
     ```json
-    HTTP/1.1 200
+    HTTP/1.1 204
     ```
 
 ### 👧 사용자 - 등록된 도서 리스트 조회
@@ -240,7 +240,7 @@
     ```
 - 응답
     ```json
-    HTTP/1.1 200
+    HTTP/1.1 204
     ```
 
 ### 👧 사용자 - 도서 예약 생성
@@ -258,7 +258,7 @@
     ```
 - 응답
     ```json
-    HTTP/1.1 200
+    HTTP/1.1 201
     Content-Type: application/json
     
     {
@@ -309,6 +309,6 @@
     ```
 - 응답
     ```json
-    HTTP/1.1 200
+    HTTP/1.1 204
     ```
   

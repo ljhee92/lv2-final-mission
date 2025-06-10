@@ -119,6 +119,24 @@ public class IntegrationTest {
                 .statusCode(HttpStatus.OK.value());
     }
 
+    @Test
+    void 토큰이_없다면_예외를_반환한다() {
+        RestAssured.given().log().all()
+                .when().get("/login/check")
+                .then().log().all()
+                .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    void 유효하지_않은_토큰이면_예외를_반환한다() {
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", "wrongToken")
+                .when().get("/login/check")
+                .then().log().all()
+                .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
+
     private String getToken(LoginRequest loginRequest) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

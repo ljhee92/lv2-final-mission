@@ -2,6 +2,7 @@ package finalmission;
 
 import finalmission.domain.Member;
 import finalmission.fixture.MemberFixture;
+import finalmission.presentation.request.LoginMember;
 import finalmission.presentation.request.LoginRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -87,5 +88,28 @@ public class IntegrationTest {
                 .when().post("/login")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void 로그아웃에_성공한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        RestAssured.given().log().all()
+                .cookie("token", token)
+                .when().post("/logout")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    private String getToken(LoginRequest loginRequest) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .when().post("/login")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract().cookie("token");
     }
 }

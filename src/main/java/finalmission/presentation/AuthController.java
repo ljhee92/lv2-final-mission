@@ -34,4 +34,14 @@ public class AuthController {
         cookie.setMaxAge(60 * 10);
         response.addCookie(cookie);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return ResponseEntity.ok()
+                .build();
+    }
 }

@@ -51,7 +51,7 @@
 ### 🧑‍💼 관리자 - 도서 검색
 - 요청
     ```json
-    GET /admin/books?title=오브젝트
+    GET /admin/books?keyword=오브젝트
     cookie: _ga=GA1.1.48222725.1666268105; _ga_QD3BVX7MKT=GS1.1.1687746261.15.1.1687747186.0.0.0; Idea-25a74f9c=3cbc3411-daca-48c1-8201-51bdcdd93164; token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwibmFtZSI6IuyWtOuTnOuvvCIsInJvbGUiOiJBRE1JTiJ9.vcK93ONRQYPFCxT5KleSM6b7cl1FE-neSLKaFyslsZM
     ```
 - 응답

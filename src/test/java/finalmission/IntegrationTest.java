@@ -137,6 +137,20 @@ public class IntegrationTest {
                 .statusCode(HttpStatus.UNAUTHORIZED.value());
     }
 
+    @Test
+    void 관리자가_도서를_검색한다() {
+        Member admin = memberFixture.createAdmin();
+        String token = getToken(new LoginRequest(admin.getEmail(), admin.getPassword()));
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .param("keyword", "오브젝트")
+                .when().get("/admin/books")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+    }
+
     private String getToken(LoginRequest loginRequest) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

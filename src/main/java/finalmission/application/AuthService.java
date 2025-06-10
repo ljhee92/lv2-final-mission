@@ -32,4 +32,9 @@ public class AuthService {
             throw new IllegalArgumentException("[ERROR] 올바른 비밀번호가 아닙니다.");
         }
     }
+
+    public Member findMemberByToken(String token) {
+        Long memberId = jwtTokenProvider.getId(token);
+        return memberService.findMemberById(memberId);
+    }
 }

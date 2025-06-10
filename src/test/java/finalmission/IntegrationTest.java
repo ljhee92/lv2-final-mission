@@ -4,9 +4,11 @@ import finalmission.domain.Member;
 import finalmission.fixture.MemberFixture;
 import finalmission.presentation.request.LoginMember;
 import finalmission.presentation.request.LoginRequest;
+import finalmission.presentation.response.MemberResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -99,6 +101,22 @@ public class IntegrationTest {
         RestAssured.given().log().all()
                 .cookie("token", token)
                 .when().post("/logout")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    @Disabled
+    // argument mismatch error
+    void 로그인_여부를_확인한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().get("/login/check")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
     }

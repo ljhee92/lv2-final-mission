@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.exception;
 
 import finalmission.presentation.response.ErrorResponse;
 import org.springframework.http.HttpStatus;

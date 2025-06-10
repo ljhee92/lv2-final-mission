@@ -19,4 +19,9 @@ public class MemberService {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("[ERROR] 등록된 이메일이 아닙니다."));
     }
+
+    public Member findMemberById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("[ERROR] 등록된 회원이 아닙니다."));
+    }
 }

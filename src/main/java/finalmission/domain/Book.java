@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -23,6 +24,8 @@ public class Book {
 
     private String title;
 
+    private String author;
+
     private LocalDate pubDate;
 
     private String description;
@@ -33,7 +36,27 @@ public class Book {
 
     private int totalQuantity;
 
-    public static Book create(String title, LocalDate pubDate, String description, String image, String isbn, int totalQuantity) {
-        return new Book(null, title, pubDate, description, image, isbn, totalQuantity);
+    public static Book create(
+            String title,
+            String author,
+            LocalDate pubDate,
+            String description,
+            String image,
+            String isbn,
+            int totalQuantity
+    ) {
+        return new Book(null, title, author, pubDate, description, image, isbn, totalQuantity);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

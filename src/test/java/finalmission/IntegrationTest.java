@@ -2,6 +2,7 @@ package finalmission;
 
 import finalmission.domain.Member;
 import finalmission.fixture.MemberFixture;
+import finalmission.presentation.request.BookCreateRequest;
 import finalmission.presentation.request.LoginRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -15,7 +16,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
-import static org.hamcrest.Matchers.notNullValue;
+import java.time.LocalDate;
+
+import static org.hamcrest.Matchers.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -146,7 +149,8 @@ public class IntegrationTest {
                 .param("keyword", "오브젝트")
                 .when().get("/admin/books")
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -162,6 +166,51 @@ public class IntegrationTest {
                 .when().get("/admin/books")
                 .then().log().all()
                 .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    void 관리자가_도서를_등록한다() {
+        Member admin = memberFixture.createAdmin();
+        LoginRequest loginRequest = new LoginRequest(admin.getEmail(), admin.getPassword());
+        String token = getToken(loginRequest);
+
+        BookCreateRequest request = getBookCreateRequestOfObject();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .body(request)
+                .when().post("/admin/books")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    void 사용자가_도서를_등록하면_예외를_반환한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        BookCreateRequest request = getBookCreateRequestOfObject();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .body(request)
+                .when().post("/admin/books")
+                .then().log().all()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    private BookCreateRequest getBookCreateRequestOfObject() {
+        String title = "오브젝트";
+        String author = "조영호 (지은이)";
+        LocalDate pubDate = LocalDate.of(2019, 6, 17);
+        String description = "역할, 책임, 협력에 기반해 객체지향 프로그램을 설계하고 구현하는 방법, 응집도와 결합도를 이용해 설계를 트레이드오프하는 방법, 설계를 유연하게 만드는 다양한 의존성 관리 기법, 타입 계층을 위한 상속과 코드 재사용을 위한 합성의 개념 등을 다룬다.";
+        String image = "https://image.aladin.co.kr/product/19368/10/coversum/k972635015_1.jpg";
+        String isbn = "K972635015";
+        int totalQuantity = 2;
+        return new BookCreateRequest(title, author, pubDate, description, image, isbn, totalQuantity);
     }
 
     private String getToken(LoginRequest loginRequest) {

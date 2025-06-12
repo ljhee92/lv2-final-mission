@@ -1,6 +1,6 @@
 package finalmission.presentation.response;
 
-import finalmission.infra.thirdparty.Item;
+import finalmission.infra.thirdparty.AladinSearchResponse;
 
 public record BookSearchResponse(
         String title,
@@ -11,9 +11,9 @@ public record BookSearchResponse(
         String isbn
 ) {
 
-    public static BookSearchResponse from(Item item) {
+    public static BookSearchResponse from(AladinSearchResponse aladinSearchResponse) {
         return new BookSearchResponse(
-                item.title(), item.author(), item.pubDate(), item.description(), item.cover(), item.isbn()
+                aladinSearchResponse.title(), aladinSearchResponse.author(), aladinSearchResponse.pubDate(), aladinSearchResponse.description(), aladinSearchResponse.cover(), aladinSearchResponse.isbn()
         );
     }
 }

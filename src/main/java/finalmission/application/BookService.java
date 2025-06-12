@@ -1,9 +1,8 @@
 package finalmission.application;
 
 import finalmission.infra.thirdparty.AladinRestClient;
-import finalmission.infra.thirdparty.AladinSearchResponse;
+import finalmission.infra.thirdparty.AladinSearchResponses;
 import finalmission.presentation.response.BookSearchResponse;
-import finalmission.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +17,9 @@ public class BookService {
     }
 
     public List<BookSearchResponse> searchBooks(String keyword) {
-        AladinSearchResponse searchResponse = aladinRestClient.search(keyword);
+        AladinSearchResponses searchResponses = aladinRestClient.search(keyword);
 
-        return searchResponse.item().stream()
+        return searchResponses.item().stream()
                 .map(BookSearchResponse::from)
                 .toList();
     }

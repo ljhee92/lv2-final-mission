@@ -23,7 +23,7 @@ public class AladinRestClient {
         this.restClient = restClientBuilder.baseUrl(aladinApiBaseUrl).build();
     }
 
-    public AladinSearchResponse search(String keyword) {
+    public AladinSearchResponses search(String keyword) {
         try {
             return restClient.get()
                     .uri(uriBuilder -> uriBuilder
@@ -35,7 +35,7 @@ public class AladinRestClient {
                             .build()
                     )
                     .retrieve()
-                    .body(AladinSearchResponse.class);
+                    .body(AladinSearchResponses.class);
         } catch (RestClientException e) {
             throw new ApiException("[ERROR] API 통신 중 문제 발생", HttpStatus.SERVICE_UNAVAILABLE);
         }

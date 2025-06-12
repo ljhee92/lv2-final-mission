@@ -2,13 +2,10 @@ package finalmission;
 
 import finalmission.domain.Member;
 import finalmission.fixture.MemberFixture;
-import finalmission.presentation.request.LoginMember;
 import finalmission.presentation.request.LoginRequest;
-import finalmission.presentation.response.MemberResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

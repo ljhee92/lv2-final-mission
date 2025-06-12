@@ -43,4 +43,12 @@ public class ReservationController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/admin/reservations/{id}")
+    public ResponseEntity<Void> adminCancelReservation(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable(required = false) Long id
+    ) {
+        reservationService.cancelReservation(id);
+        return ResponseEntity.noContent().build();
+    }
 }

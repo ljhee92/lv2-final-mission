@@ -48,6 +48,12 @@ public class ReservationService {
         }
     }
 
+    @Transactional
+    public void cancelReservation(Long reservationId) {
+        Reservation reservationById = findReservationById(reservationId);
+        reservationById.cancel();
+    }
+
     private Reservation findReservationById(Long id) {
         return reservationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("[ERROR] 존재하지 않는 예약입니다."));

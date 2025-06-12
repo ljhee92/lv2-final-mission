@@ -343,6 +343,23 @@ public class IntegrationTest {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
+    @Test
+    void 사용자가_예약한_도서를_관리자가_취소한다() {
+        Member admin = memberFixture.createAdmin();
+        LoginRequest loginRequest = new LoginRequest(admin.getEmail(), admin.getPassword());
+        String token = getToken(loginRequest);
+
+        Reservation reservation = reservationFixture.createReservation1();
+        Long reservationId = reservation.getId();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().delete("/admin/reservations/" + reservationId)
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
     private String getToken(LoginRequest loginRequest) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

@@ -1,5 +1,6 @@
 package finalmission;
 
+import finalmission.domain.Book;
 import finalmission.domain.Member;
 import finalmission.fixture.BookFixture;
 import finalmission.fixture.MemberFixture;
@@ -241,6 +242,56 @@ public class IntegrationTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("size()", is(2));
     }
+
+    @Test
+    void 관리자가_등록된_도서를_삭제한다() {
+        Member admin = memberFixture.createAdmin();
+        LoginRequest loginRequest = new LoginRequest(admin.getEmail(), admin.getPassword());
+        String token = getToken(loginRequest);
+
+        Book book1 = bookFixture.createBook1();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().delete("/admin/books/" + book1.getId())
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void 관리자가_등록되지_않은_도서를_삭제하면_예외가_발생한다() {
+        Member admin = memberFixture.createAdmin();
+        LoginRequest loginRequest = new LoginRequest(admin.getEmail(), admin.getPassword());
+        String token = getToken(loginRequest);
+
+        Book book1 = bookFixture.createBook1();
+        Long notExistId = book1.getId() + 1;
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().delete("/admin/books/" + notExistId)
+                .then().log().all()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void 사용자가_등록된_도서를_삭제하면_예외가_발생한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        Book book1 = bookFixture.createBook1();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().delete("/admin/books/" + book1.getId())
+                .then().log().all()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
 
     private String getToken(LoginRequest loginRequest) {
         return RestAssured.given().log().all()

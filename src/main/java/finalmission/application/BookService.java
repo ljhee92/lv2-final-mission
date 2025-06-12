@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class BookService {
@@ -56,5 +57,16 @@ public class BookService {
         return books.stream()
                 .map(BookResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteBook(Long id) {
+        Book bookById = findBookById(id);
+        bookRepository.deleteById(bookById.getId());
+    }
+
+    private Book findBookById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("[ERROR] 등록되지 않은 책입니다."));
     }
 }

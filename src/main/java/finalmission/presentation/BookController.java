@@ -9,7 +9,9 @@ import finalmission.presentation.response.BookSearchResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,5 +52,16 @@ public class BookController {
     public ResponseEntity<List<BookResponse>> getBooks(@AuthenticationPrincipal LoginMember loginMember) {
         List<BookResponse> responses = bookService.getBooks();
         return ResponseEntity.ok().body(responses);
+    }
+
+    @DeleteMapping("/admin/books/{id}")
+    public ResponseEntity<Void> deleteBook(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable Long id
+    ) {
+        bookService.deleteBook(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }

@@ -36,6 +36,10 @@ public class Book {
 
     private int totalQuantity;
 
+    private int rentalQuantity;
+
+    private LocalDate lastReturnDate;
+
     public static Book create(
             String title,
             String author,
@@ -45,7 +49,7 @@ public class Book {
             String isbn,
             int totalQuantity
     ) {
-        return new Book(null, title, author, pubDate, description, image, isbn, totalQuantity);
+        return new Book(null, title, author, pubDate, description, image, isbn, totalQuantity, 0, null);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package finalmission;
 
 import finalmission.domain.Member;
+import finalmission.fixture.BookFixture;
 import finalmission.fixture.MemberFixture;
 import finalmission.presentation.request.BookCreateRequest;
 import finalmission.presentation.request.LoginRequest;
@@ -30,6 +31,9 @@ public class IntegrationTest {
 
     @Autowired
     private MemberFixture memberFixture;
+
+    @Autowired
+    private BookFixture bookFixture;
 
     @BeforeEach
     void setUp() {
@@ -202,15 +206,40 @@ public class IntegrationTest {
                 .statusCode(HttpStatus.FORBIDDEN.value());
     }
 
-    private BookCreateRequest getBookCreateRequestOfObject() {
-        String title = "오브젝트";
-        String author = "조영호 (지은이)";
-        LocalDate pubDate = LocalDate.of(2019, 6, 17);
-        String description = "역할, 책임, 협력에 기반해 객체지향 프로그램을 설계하고 구현하는 방법, 응집도와 결합도를 이용해 설계를 트레이드오프하는 방법, 설계를 유연하게 만드는 다양한 의존성 관리 기법, 타입 계층을 위한 상속과 코드 재사용을 위한 합성의 개념 등을 다룬다.";
-        String image = "https://image.aladin.co.kr/product/19368/10/coversum/k972635015_1.jpg";
-        String isbn = "K972635015";
-        int totalQuantity = 2;
-        return new BookCreateRequest(title, author, pubDate, description, image, isbn, totalQuantity);
+    @Test
+    void 관리자가_등록된_도서리스트를_조회한다() {
+        Member admin = memberFixture.createAdmin();
+        LoginRequest loginRequest = new LoginRequest(admin.getEmail(), admin.getPassword());
+        String token = getToken(loginRequest);
+
+        bookFixture.createBook1();
+        bookFixture.createBook2();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().get("/books")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", is(2));
+    }
+
+    @Test
+    void 사용자가_등록된_도서리스트를_조회한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        bookFixture.createBook1();
+        bookFixture.createBook2();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().get("/books")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", is(2));
     }
 
     private String getToken(LoginRequest loginRequest) {
@@ -221,5 +250,16 @@ public class IntegrationTest {
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .extract().cookie("token");
+    }
+
+    private BookCreateRequest getBookCreateRequestOfObject() {
+        String title = "오브젝트";
+        String author = "조영호 (지은이)";
+        LocalDate pubDate = LocalDate.of(2019, 6, 17);
+        String description = "역할, 책임, 협력에 기반해 객체지향 프로그램을 설계하고 구현하는 방법, 응집도와 결합도를 이용해 설계를 트레이드오프하는 방법, 설계를 유연하게 만드는 다양한 의존성 관리 기법, 타입 계층을 위한 상속과 코드 재사용을 위한 합성의 개념 등을 다룬다.";
+        String image = "https://image.aladin.co.kr/product/19368/10/coversum/k972635015_1.jpg";
+        String isbn = "K972635015";
+        int totalQuantity = 2;
+        return new BookCreateRequest(title, author, pubDate, description, image, isbn, totalQuantity);
     }
 }

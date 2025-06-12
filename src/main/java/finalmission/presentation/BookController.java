@@ -4,6 +4,7 @@ import finalmission.application.BookService;
 import finalmission.presentation.request.BookCreateRequest;
 import finalmission.presentation.request.LoginMember;
 import finalmission.presentation.response.BookCreateResponse;
+import finalmission.presentation.response.BookResponse;
 import finalmission.presentation.response.BookSearchResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,11 @@ public class BookController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @GetMapping("/books")
+    public ResponseEntity<List<BookResponse>> getBooks(@AuthenticationPrincipal LoginMember loginMember) {
+        List<BookResponse> responses = bookService.getBooks();
+        return ResponseEntity.ok().body(responses);
     }
 }

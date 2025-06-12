@@ -5,6 +5,7 @@ import finalmission.infra.thirdparty.AladinRestClient;
 import finalmission.infra.thirdparty.AladinSearchResponses;
 import finalmission.presentation.request.BookCreateRequest;
 import finalmission.presentation.response.BookCreateResponse;
+import finalmission.presentation.response.BookResponse;
 import finalmission.presentation.response.BookSearchResponse;
 import finalmission.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,12 @@ public class BookService {
         Book bookWithoutId = Book.create(title, author, pubDate, description, image, isbn, totalQuantity);
         Book bookWithId = bookRepository.save(bookWithoutId);
         return BookCreateResponse.from(bookWithId);
+    }
+
+    public List<BookResponse> getBooks() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .map(BookResponse::from)
+                .toList();
     }
 }

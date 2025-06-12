@@ -1,6 +1,7 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.application.AuthService;
+import finalmission.presentation.AuthenticationPrincipal;
 import finalmission.presentation.request.LoginMember;
 import finalmission.presentation.request.LoginRequest;
 import finalmission.presentation.response.MemberResponse;

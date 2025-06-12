@@ -1,6 +1,7 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.application.BookService;
+import finalmission.presentation.AuthenticationPrincipal;
 import finalmission.presentation.request.BookCreateRequest;
 import finalmission.presentation.request.LoginMember;
 import finalmission.presentation.response.BookCreateResponse;

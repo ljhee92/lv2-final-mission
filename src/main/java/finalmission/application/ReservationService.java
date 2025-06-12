@@ -4,12 +4,15 @@ import finalmission.domain.Book;
 import finalmission.domain.BookInformation;
 import finalmission.domain.Member;
 import finalmission.domain.Reservation;
+import finalmission.domain.ReservationStatus;
 import finalmission.presentation.request.ReservationCreateRequest;
+import finalmission.presentation.request.ReservationResponse;
 import finalmission.presentation.response.ReservationCreateResponse;
 import finalmission.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -57,5 +60,12 @@ public class ReservationService {
     private Reservation findReservationById(Long id) {
         return reservationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("[ERROR] 존재하지 않는 예약입니다."));
+    }
+
+    public List<ReservationResponse> getReservations() {
+        List<Reservation> reservedReservations = reservationRepository.findByStatus(ReservationStatus.RESERVED);
+        return reservedReservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 }

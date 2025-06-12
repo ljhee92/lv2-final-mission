@@ -360,6 +360,24 @@ public class IntegrationTest {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
+    @Test
+    void 관리자가_사용자의_예약내역을_조회한다() {
+        Member admin = memberFixture.createAdmin();
+        LoginRequest loginRequest = new LoginRequest(admin.getEmail(), admin.getPassword());
+        String token = getToken(loginRequest);
+
+        reservationFixture.createReservation1();
+        reservationFixture.createReservation2();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().get("/admin/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", is(2));
+    }
+
     private String getToken(LoginRequest loginRequest) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

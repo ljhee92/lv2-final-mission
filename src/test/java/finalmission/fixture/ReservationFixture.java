@@ -34,4 +34,14 @@ public class ReservationFixture {
 
         return reservationRepository.save(Reservation.create(member1, reserveDate, bookInformation));
     }
+
+    public Reservation createReservation2() {
+        Member member2 = memberFixture.createMember2();
+        Book book2 = bookFixture.createBook2();
+
+        LocalDate reserveDate = LocalDate.now();
+        BookInformation bookInformation = BookInformation.from(book2);
+
+        return reservationRepository.save(Reservation.create(member2, reserveDate, bookInformation));
+    }
 }

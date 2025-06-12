@@ -19,10 +19,10 @@ public class MemberTest {
         String email = "member1@email.com";
         String password = "password";
 
-        Member created = Member.createUser(name, email, password);
+        Member created = Member.createMember(name, email, password);
 
         assertAll(
-                () -> assertThat(created.getRole()).isEqualTo(Role.USER),
+                () -> assertThat(created.getRole()).isEqualTo(Role.MEMBER),
                 () -> assertThat(created.getName()).isEqualTo(name),
                 () -> assertThat(created.getEmail()).isEqualTo(email),
                 () -> assertThat(created.getPassword()).isEqualTo(password)
@@ -51,7 +51,7 @@ public class MemberTest {
         String email = "member1@email.com";
         String password = "password";
 
-        assertThatThrownBy(() -> Member.createUser(name, email, password))
+        assertThatThrownBy(() -> Member.createMember(name, email, password))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -71,7 +71,7 @@ public class MemberTest {
         String name = "사용자";
         String password = "password";
 
-        assertThatThrownBy(() -> Member.createUser(name, email, password))
+        assertThatThrownBy(() -> Member.createMember(name, email, password))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -91,7 +91,7 @@ public class MemberTest {
         String name = "사용자";
         String email = "member1@email.com";
 
-        assertThatThrownBy(() -> Member.createUser(name, email, password))
+        assertThatThrownBy(() -> Member.createMember(name, email, password))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -115,7 +115,7 @@ public class MemberTest {
         String emailOfAdmin = "admin@email.com";
         String passwordOfAdmin = "passwordAdmin";
 
-        Member member = Member.createUser(nameOfMember, emailOfMember, passwordOfMember);
+        Member member = Member.createMember(nameOfMember, emailOfMember, passwordOfMember);
         Member admin = Member.createAdmin(nameOfAdmin, emailOfAdmin, passwordOfAdmin);
 
         assertAll(
@@ -136,7 +136,7 @@ public class MemberTest {
 
         String inCorrectPassword = "inCorrectPassword";
 
-        Member member = Member.createUser(nameOfMember, emailOfMember, passwordOfMember);
+        Member member = Member.createMember(nameOfMember, emailOfMember, passwordOfMember);
         Member admin = Member.createAdmin(nameOfAdmin, emailOfAdmin, passwordOfAdmin);
 
         assertAll(

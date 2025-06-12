@@ -37,9 +37,9 @@ public class Member {
 
     private String password;
 
-    public static Member createUser(String name, String email, String password) {
+    public static Member createMember(String name, String email, String password) {
         validate(name, email, password);
-        return new Member(null, Role.USER, name, email, password);
+        return new Member(null, Role.MEMBER, name, email, password);
     }
 
     public static Member createAdmin(String name, String email, String password) {

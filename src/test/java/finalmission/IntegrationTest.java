@@ -137,7 +137,8 @@ public class IntegrationTest {
     @Test
     void 관리자가_도서를_검색한다() {
         Member admin = memberFixture.createAdmin();
-        String token = getToken(new LoginRequest(admin.getEmail(), admin.getPassword()));
+        LoginRequest loginRequest = new LoginRequest(admin.getEmail(), admin.getPassword());
+        String token = getToken(loginRequest);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -146,6 +147,21 @@ public class IntegrationTest {
                 .when().get("/admin/books")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void 사용자가_도서를_검색하면_예외를_응답한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .param("keyword", "오브젝트")
+                .when().get("/admin/books")
+                .then().log().all()
+                .statusCode(HttpStatus.FORBIDDEN.value());
     }
 
     private String getToken(LoginRequest loginRequest) {

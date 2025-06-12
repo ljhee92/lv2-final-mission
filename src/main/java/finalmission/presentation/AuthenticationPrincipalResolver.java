@@ -1,16 +1,13 @@
 package finalmission.presentation;
 
 import finalmission.application.AuthService;
-import finalmission.exception.AuthException;
-import jakarta.servlet.http.Cookie;
+import finalmission.infra.jwt.JwtTokenExtractor;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import java.util.Arrays;
 
 public class AuthenticationPrincipalResolver implements HandlerMethodArgumentResolver {
 
@@ -33,20 +30,7 @@ public class AuthenticationPrincipalResolver implements HandlerMethodArgumentRes
             WebDataBinderFactory binderFactory
     ) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        String token = extractToken(request);
+        String token = JwtTokenExtractor.extractToken(request);
         return authService.findMemberByToken(token);
-    }
-
-    private String extractToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            throw new AuthException("[ERROR] 쿠키가 존재하지 않습니다.");
-        }
-
-        return Arrays.stream(cookies)
-                .filter(cookie -> "token".equals(cookie.getName()))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElseThrow(() -> new AuthException("[ERROR] 토큰이 존재하지 않습니다."));
     }
 }

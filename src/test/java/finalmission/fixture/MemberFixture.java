@@ -17,14 +17,14 @@ public class MemberFixture {
         String name = "사용자";
         String email = "member1@email.com";
         String password = "password";
-        return memberRepository.save(Member.createUser(name, email, password));
+        return memberRepository.save(Member.createMember(name, email, password));
     }
 
     public Member createMember2() {
         String name = "사용자";
         String email = "member1@email.com";
         String password = "password";
-        return memberRepository.save(Member.createUser(name, email, password));
+        return memberRepository.save(Member.createMember(name, email, password));
     }
 
     public Member createAdmin() {

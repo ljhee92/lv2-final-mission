@@ -1,5 +1,6 @@
 package finalmission.infra.jwt;
 
+import finalmission.domain.Role;
 import finalmission.presentation.request.LoginMember;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -59,5 +60,14 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject());
+    }
+
+    public Role getRole(String token) {
+        return Role.from(Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get("role", String.class));
     }
 }

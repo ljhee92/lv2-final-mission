@@ -1,6 +1,7 @@
 package finalmission.application;
 
 import finalmission.domain.Member;
+import finalmission.domain.Role;
 import finalmission.exception.AuthException;
 import finalmission.infra.jwt.JwtTokenProvider;
 import finalmission.presentation.request.LoginMember;
@@ -45,5 +46,10 @@ public class AuthService {
         if (!jwtTokenProvider.validateToken(token)) {
             throw new AuthException("[ERROR] 유효하지 않은 토큰입니다.");
         }
+    }
+
+    public Role findRoleByToken(String token) {
+        checkToken(token);
+        return jwtTokenProvider.getRole(token);
     }
 }

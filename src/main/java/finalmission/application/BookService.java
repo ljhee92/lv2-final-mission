@@ -65,7 +65,7 @@ public class BookService {
         bookRepository.deleteById(bookById.getId());
     }
 
-    private Book findBookById(Long id) {
+    public Book findBookById(Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("[ERROR] 등록되지 않은 책입니다."));
     }

@@ -6,6 +6,8 @@ import finalmission.fixture.BookFixture;
 import finalmission.fixture.MemberFixture;
 import finalmission.presentation.request.BookCreateRequest;
 import finalmission.presentation.request.LoginRequest;
+import finalmission.presentation.request.ReservationCreateRequest;
+import finalmission.presentation.response.ReservationCreateResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -292,6 +294,32 @@ public class IntegrationTest {
                 .statusCode(HttpStatus.FORBIDDEN.value());
     }
 
+    @Test
+    void 사용자가_도서를_예약한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        Book book1 = bookFixture.createBook1();
+
+        LocalDate reserveDate = LocalDate.now();
+        ReservationCreateRequest request = new ReservationCreateRequest(member.getEmail(), reserveDate, book1.getId());
+        ReservationCreateResponse expectedResponse = new ReservationCreateResponse(
+                1L,
+                member.getEmail(),
+                reserveDate,
+                reserveDate.plusDays(7),
+                book1.getId()
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
+    }
 
     private String getToken(LoginRequest loginRequest) {
         return RestAssured.given().log().all()

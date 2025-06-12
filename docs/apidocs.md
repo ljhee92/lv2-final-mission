@@ -253,9 +253,8 @@
     
     {
         "email": "member1@email.com",
-        "retnalDate": "2025-06-10",
-        "returnDate": "2025-06-17",
-        "isbn": "K422837236"
+        "reserveDate": "2025-06-10",
+        "bookId": "1"
     }
     ```
 - 응답
@@ -266,9 +265,9 @@
     {
         "id": 1,
         "email": "member1@email.com",
-        "retnalDate": "2025-06-10",
+        "reserveDate": "2025-06-10",
         "returnDate": "2025-06-17",
-        "isbn": "K422837236"
+        "bookId": "1"
     }
     ```
 
@@ -288,7 +287,7 @@
           "id": "1",
           "title": "오브젝트",
           "author": "조영호 (지은이)",
-          "rentalDate": "2025-06-07",
+          "reserveDate": "2025-06-07",
           "returnDate": "2025-06-11",
           "status": "예약"
         },
@@ -296,7 +295,7 @@
           "id": "2",
           "title": "좋은 코드, 나쁜 코드 - 프로그래머의 코드 품질 개선법, 2023년 세종도서 학술부문 추천도서",
           "author": "톰 롱 (지은이), 차건회 (옮긴이)",
-          "rentalDate": "2025-06-10",
+          "reserveDate": "2025-06-10",
           "returnDate": "2025-06-17",
           "status": "예약취소"
         }   

@@ -2,8 +2,10 @@ package finalmission;
 
 import finalmission.domain.Book;
 import finalmission.domain.Member;
+import finalmission.domain.Reservation;
 import finalmission.fixture.BookFixture;
 import finalmission.fixture.MemberFixture;
+import finalmission.fixture.ReservationFixture;
 import finalmission.presentation.request.BookCreateRequest;
 import finalmission.presentation.request.LoginRequest;
 import finalmission.presentation.request.ReservationCreateRequest;
@@ -37,6 +39,9 @@ public class IntegrationTest {
 
     @Autowired
     private BookFixture bookFixture;
+
+    @Autowired
+    private ReservationFixture reservationFixture;
 
     @BeforeEach
     void setUp() {
@@ -319,6 +324,23 @@ public class IntegrationTest {
                 .when().post("/reservations")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    void 사용자가_자신의_도서예약을_취소한다() {
+        Member member = memberFixture.createMember1();
+        LoginRequest loginRequest = new LoginRequest(member.getEmail(), member.getPassword());
+        String token = getToken(loginRequest);
+
+        Reservation reservation = reservationFixture.createReservation1();
+        Long reservationId = reservation.getId();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().delete("/reservations/" + reservationId)
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     private String getToken(LoginRequest loginRequest) {

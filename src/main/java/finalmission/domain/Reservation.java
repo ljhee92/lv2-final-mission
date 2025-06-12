@@ -50,4 +50,13 @@ public class Reservation {
                 ReservationStatus.RESERVED
         );
     }
+
+    public boolean isMine(Member member) {
+        return member.equals(this.member);
+    }
+
+    public void cancel() {
+        this.status = ReservationStatus.CANCELED;
+        this.returnDate = LocalDate.now();
+    }
 }

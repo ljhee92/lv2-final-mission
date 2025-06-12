@@ -10,6 +10,8 @@ import finalmission.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class ReservationService {
 
@@ -35,5 +37,19 @@ public class ReservationService {
         Reservation reservationWithoutId = Reservation.create(member, request.reserveDate(), bookInformation);
         Reservation reservationWithId = reservationRepository.save(reservationWithoutId);
         return ReservationCreateResponse.from(reservationWithId);
+    }
+
+    @Transactional
+    public void cancelReservation(Long memberId, Long reservationId) {
+        Member memberById = memberService.findMemberById(memberId);
+        Reservation reservationById = findReservationById(reservationId);
+        if (reservationById.isMine(memberById)) {
+            reservationById.cancel();
+        }
+    }
+
+    private Reservation findReservationById(Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("[ERROR] 존재하지 않는 예약입니다."));
     }
 }

@@ -58,11 +58,9 @@ public class BookController {
     @DeleteMapping("/admin/books/{id}")
     public ResponseEntity<Void> deleteBook(
             @AuthenticationPrincipal LoginMember loginMember,
-            @PathVariable Long id
+            @PathVariable(required = false) Long id
     ) {
         bookService.deleteBook(id);
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .build();
+        return ResponseEntity.noContent().build();
     }
 }

@@ -18,6 +18,8 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+secure.properties
+secure.yml
 .idea
 *.iws
 *.iml
